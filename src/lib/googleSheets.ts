@@ -36,21 +36,35 @@ export class GoogleSheetsService {
   private sheetName: string;
 
   constructor() {
-    this.spreadsheetId = process.env.GOOGLE_SHEET_ID!;
-    this.sheetName = process.env.GOOGLE_SHEET_NAME!;
+    // Validar variáveis de ambiente necessárias
+    if (!process.env.GOOGLE_SHEET_ID) {
+      throw new Error('GOOGLE_SHEET_ID não está configurado');
+    }
+    if (!process.env.GOOGLE_CLIENT_EMAIL) {
+      throw new Error('GOOGLE_CLIENT_EMAIL não está configurado');
+    }
+    if (!process.env.GOOGLE_PRIVATE_KEY) {
+      throw new Error('GOOGLE_PRIVATE_KEY não está configurado');
+    }
+
+    this.spreadsheetId = process.env.GOOGLE_SHEET_ID;
+    this.sheetName = process.env.GOOGLE_SHEET_NAME || 'cogni';
     
     // Configurar autenticação com Service Account
     this.auth = new google.auth.GoogleAuth({
       credentials: {
         client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+        private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        type: 'service_account',
       },
-      version: 'v4',
-      auth: process.env.GOOGLE_SHEETS_API_KEY
+      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
     });
     
-    this.spreadsheetId = process.env.GOOGLE_SHEET_ID;
-    this.sheetName = process.env.GOOGLE_SHEET_NAME || 'cogni';
+    // Inicializar o cliente do Google Sheets
+    this.sheets = google.sheets({
+      version: 'v4',
+      auth: this.auth,
+    });
   }
 
   // Método para adicionar cabeçalhos na planilha (executar apenas uma vez)
@@ -146,7 +160,7 @@ export class GoogleSheetsService {
       return { 
         success: true, 
         title: response.data.properties?.title,
-        sheets: response.data.sheets?.map(sheet => sheet.properties?.title)
+        sheets: response.data.sheets?.map((sheet: any) => sheet.properties?.title)
       };
     } catch (error) {
       console.error('Erro ao testar conexão:', error);
