@@ -1,6 +1,4 @@
 import { google } from 'googleapis';
-import * as fs from 'fs';
-import * as path from 'path';
 
 export interface FormData {
   nome: string;
@@ -35,17 +33,14 @@ export class GoogleSheetsService {
 
     let credentials: any;
     
-    // Tentar ler do arquivo JSON
+    // Decodificar do Base64
     try {
-      const jsonPath = path.join(process.cwd(), 'river-pillar-466211-v1-7e41cadb78f1.json');
-      if (fs.existsSync(jsonPath)) {
-        const fileContent = fs.readFileSync(jsonPath, 'utf-8');
-        credentials = JSON.parse(fileContent);
-      } else if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
-        credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
-      } else {
-        throw new Error('Credenciais não encontradas');
+      const base64Creds = process.env.GOOGLE_CREDENTIALS_BASE64;
+      if (!base64Creds) {
+        throw new Error('GOOGLE_CREDENTIALS_BASE64 não configurado');
       }
+      const jsonString = Buffer.from(base64Creds, 'base64').toString('utf-8');
+      credentials = JSON.parse(jsonString);
     } catch (e) {
       throw new Error('Erro ao carregar credenciais: ' + (e as Error).message);
     }
