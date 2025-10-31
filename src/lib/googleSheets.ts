@@ -40,11 +40,31 @@ export class GoogleSheetsService {
     if (!process.env.GOOGLE_SHEET_ID) {
       throw new Error('GOOGLE_SHEET_ID não está configurado');
     }
-    if (!process.env.GOOGLE_CLIENT_EMAIL) {
-      throw new Error('GOOGLE_CLIENT_EMAIL não está configurado');
-    }
-    if (!process.env.GOOGLE_PRIVATE_KEY) {
-      throw new Error('GOOGLE_PRIVATE_KEY não está configurado');
+
+    // Suportar dois formatos: JSON completo ou variáveis individuais
+    let credentials: any;
+    
+    if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
+      // Formato 1: JSON completo (RECOMENDADO - resolve erro OpenSSL)
+      try {
+        credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
+      } catch (e) {
+        throw new Error('GOOGLE_SERVICE_ACCOUNT_JSON inválido: ' + (e as Error).message);
+      }
+    } else {
+      // Formato 2: Variáveis individuais (fallback)
+      if (!process.env.GOOGLE_CLIENT_EMAIL) {
+        throw new Error('GOOGLE_CLIENT_EMAIL não está configurado');
+      }
+      if (!process.env.GOOGLE_PRIVATE_KEY) {
+        throw new Error('GOOGLE_PRIVATE_KEY não está configurado');
+      }
+
+      credentials = {
+        type: 'service_account',
+        client_email: process.env.GOOGLE_CLIENT_EMAIL,
+        private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n').replace(/\\r/g, ''),
+      };
     }
 
     this.spreadsheetId = process.env.GOOGLE_SHEET_ID;
@@ -52,11 +72,7 @@ export class GoogleSheetsService {
     
     // Configurar autenticação com Service Account
     this.auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-        type: 'service_account',
-      },
+      credentials,
       scopes: ['https://www.googleapis.com/auth/spreadsheets'],
     });
     

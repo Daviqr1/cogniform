@@ -31,12 +31,39 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Configurar Google Sheets
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
+    // Configurar Google Sheets - com suporte a múltiplos formatos
+    let credentials: any;
+    
+    // Verificar se está usando JSON completo do service account
+    if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
+      try {
+        credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
+      } catch (e) {
+        console.error('❌ Erro ao parsear JSON do service account:', e);
+        return NextResponse.json({
+          success: false,
+          error: 'Configuração inválida do Google Service Account'
+        }, { status: 500 });
+      }
+    } else {
+      // Fallback para variáveis individuais com tratamento correto de escape
+      const privateKey = process.env.GOOGLE_PRIVATE_KEY;
+      if (!privateKey) {
+        return NextResponse.json({
+          success: false,
+          error: 'GOOGLE_PRIVATE_KEY não configurada'
+        }, { status: 500 });
+      }
+      
+      credentials = {
+        type: 'service_account',
         client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      },
+        private_key: privateKey.replace(/\\n/g, '\n').replace(/\\r/g, ''),
+      };
+    }
+
+    const auth = new google.auth.GoogleAuth({
+      credentials,
       scopes: ['https://www.googleapis.com/auth/spreadsheets'],
     });
 
