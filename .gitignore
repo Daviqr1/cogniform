@@ -1,41 +1,80 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# 🔐 VARIÁVEIS DE AMBIENTE - DADOS SENSÍVEIS
+.env
+.env.local
+.env.*.local
+.env.production.local
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+# 🔑 CREDENCIAIS E CHAVES
+*.json
+!tsconfig.json
+!eslint.config.mjs
+!next.config.ts
+!postcss.config.mjs
+.credentials
+credentials.json
+river-pillar-*.json
+*-service-account.json
 
-# testing
-/coverage
+# 📦 NODE MODULES
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
 
-# next.js
-/.next/
-/out/
+# 🔨 BUILD E DIST
+.next/
+out/
+build/
+dist/
+*.tsbuildinfo
 
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
+# 🐛 LOGS E DIAGNÓSTICOS
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# 💾 CACHE
+.cache/
+.swc/
+*.cache
 
-# vercel
+# 🖥️ IDE E EDITOR
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.AppleDouble
+.LSOverride
+*.sublime-workspace
+.vimrc
+
+# 🌐 OS
+Thumbs.db
+.env.*.local
+
+# 📝 TEMPORÁRIOS
+*.tmp
+.temp/
+temp/
+
+# 🔒 ARQUIVOS DE TESTE COM DADOS REAIS
+test-results/
+.coverage
+coverage/
+
+# 📱 MOBILE
+.expo/
+.expo-shared/
+
+# 🎯 ESPECÍFICO DO PROJETO
 .vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+.env.*.local
+!.env.example
+!.env.local.example
+river-pillar-*.json
