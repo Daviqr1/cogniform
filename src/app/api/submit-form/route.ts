@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { google } from 'googleapis';
+import * as fs from 'fs';
+import * as path from 'path';
 
 export async function POST(request: NextRequest) {
   try {
@@ -31,37 +33,27 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Configurar Google Sheets - com suporte a múltiplos formatos
+    // Carregar credenciais do arquivo JSON
     let credentials: any;
-    
-    // Verificar se está usando JSON completo do service account
-    if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
-      try {
+    try {
+      const jsonPath = path.join(process.cwd(), 'river-pillar-466211-v1-7e41cadb78f1.json');
+      if (fs.existsSync(jsonPath)) {
+        const fileContent = fs.readFileSync(jsonPath, 'utf-8');
+        credentials = JSON.parse(fileContent);
+      } else if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
         credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
-      } catch (e) {
-        console.error('❌ Erro ao parsear JSON do service account:', e);
-        return NextResponse.json({
-          success: false,
-          error: 'Configuração inválida do Google Service Account'
-        }, { status: 500 });
+      } else {
+        throw new Error('Credenciais não encontradas');
       }
-    } else {
-      // Fallback para variáveis individuais com tratamento correto de escape
-      const privateKey = process.env.GOOGLE_PRIVATE_KEY;
-      if (!privateKey) {
-        return NextResponse.json({
-          success: false,
-          error: 'GOOGLE_PRIVATE_KEY não configurada'
-        }, { status: 500 });
-      }
-      
-      credentials = {
-        type: 'service_account',
-        client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        private_key: privateKey.replace(/\\n/g, '\n').replace(/\\r/g, ''),
-      };
+    } catch (e) {
+      console.error('❌ Erro ao carregar credenciais:', e);
+      return NextResponse.json({
+        success: false,
+        error: 'Erro ao carregar credenciais'
+      }, { status: 500 });
     }
 
+    // Configurar autenticação
     const auth = new google.auth.GoogleAuth({
       credentials,
       scopes: ['https://www.googleapis.com/auth/spreadsheets'],
@@ -69,12 +61,12 @@ export async function POST(request: NextRequest) {
 
     const sheets = google.sheets({ version: 'v4', auth });
     const spreadsheetId = process.env.GOOGLE_SHEET_ID;
-    const sheetName = process.env.GOOGLE_SHEET_NAME;
+    const sheetName = process.env.GOOGLE_SHEET_NAME || 'cogni';
 
-    if (!spreadsheetId || !sheetName) {
+    if (!spreadsheetId) {
       return NextResponse.json({
         success: false,
-        error: 'Configuração da planilha incompleta'
+        error: 'GOOGLE_SHEET_ID não configurado'
       }, { status: 500 });
     }
 
@@ -137,7 +129,6 @@ export async function POST(request: NextRequest) {
   } catch (error: any) {
     console.error('❌ Erro ao processar formulário:', error);
     
-    // Log detalhado do erro
     if (error.response?.data) {
       console.error('Detalhes do erro Google:', error.response.data);
     }

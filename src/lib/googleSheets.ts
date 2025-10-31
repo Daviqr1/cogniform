@@ -1,31 +1,24 @@
 import { google } from 'googleapis';
+import * as fs from 'fs';
+import * as path from 'path';
 
 export interface FormData {
-  // Etapa 1: Informações Básicas
   nome: string;
   email: string;
   whatsapp: string;
   tempo_valor: string;
-  
-  // Etapa 2: Perfil e Autoridade
   conquista: string;
   dominio: string;
   clientes_querem: string;
   diferencial: string;
   cliente_nao_quer: string;
-  
-  // Etapa 3: Zona de Conforto
   conforto_video: string;
   conforto_stories: string;
   conforto_posts: string;
   preferencia_conteudo: string;
-  
-  // Etapa 4: Visão de Futuro
   horas_semana: string;
   assessor_que: string;
   observacoes?: string;
-  
-  // Etapa 5: Plano
   plano_assinatura: string;
 }
 
@@ -36,54 +29,41 @@ export class GoogleSheetsService {
   private sheetName: string;
 
   constructor() {
-    // Validar variáveis de ambiente necessárias
     if (!process.env.GOOGLE_SHEET_ID) {
       throw new Error('GOOGLE_SHEET_ID não está configurado');
     }
 
-    // Suportar dois formatos: JSON completo ou variáveis individuais
     let credentials: any;
     
-    if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
-      // Formato 1: JSON completo (RECOMENDADO - resolve erro OpenSSL)
-      try {
+    // Tentar ler do arquivo JSON
+    try {
+      const jsonPath = path.join(process.cwd(), 'river-pillar-466211-v1-7e41cadb78f1.json');
+      if (fs.existsSync(jsonPath)) {
+        const fileContent = fs.readFileSync(jsonPath, 'utf-8');
+        credentials = JSON.parse(fileContent);
+      } else if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
         credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
-      } catch (e) {
-        throw new Error('GOOGLE_SERVICE_ACCOUNT_JSON inválido: ' + (e as Error).message);
+      } else {
+        throw new Error('Credenciais não encontradas');
       }
-    } else {
-      // Formato 2: Variáveis individuais (fallback)
-      if (!process.env.GOOGLE_CLIENT_EMAIL) {
-        throw new Error('GOOGLE_CLIENT_EMAIL não está configurado');
-      }
-      if (!process.env.GOOGLE_PRIVATE_KEY) {
-        throw new Error('GOOGLE_PRIVATE_KEY não está configurado');
-      }
-
-      credentials = {
-        type: 'service_account',
-        client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n').replace(/\\r/g, ''),
-      };
+    } catch (e) {
+      throw new Error('Erro ao carregar credenciais: ' + (e as Error).message);
     }
 
     this.spreadsheetId = process.env.GOOGLE_SHEET_ID;
     this.sheetName = process.env.GOOGLE_SHEET_NAME || 'cogni';
     
-    // Configurar autenticação com Service Account
     this.auth = new google.auth.GoogleAuth({
       credentials,
       scopes: ['https://www.googleapis.com/auth/spreadsheets'],
     });
     
-    // Inicializar o cliente do Google Sheets
     this.sheets = google.sheets({
       version: 'v4',
       auth: this.auth,
     });
   }
 
-  // Método para adicionar cabeçalhos na planilha (executar apenas uma vez)
   async setupHeaders() {
     const headers = [
       'Data/Hora',
@@ -123,7 +103,6 @@ export class GoogleSheetsService {
     }
   }
 
-  // Método para adicionar dados do formulário
   async addFormData(formData: FormData) {
     const timestamp = new Date().toLocaleString('pt-BR');
     
@@ -166,7 +145,6 @@ export class GoogleSheetsService {
     }
   }
 
-  // Método para testar a conexão
   async testConnection() {
     try {
       const response = await this.sheets.spreadsheets.get({
