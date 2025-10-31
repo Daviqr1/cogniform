@@ -73,7 +73,7 @@ export default function MultiStepForm() {
   const validateStep = (stepIndex: number): boolean => {
     switch (stepIndex) {
       case 0:
-        return !!(formData.nome?.trim() && formData.email?.trim() && formData.whatsapp?.trim() && formData.tempo_valor);
+        return !!(formData.nome?.trim() && formData.email?.trim() && formData.whatsapp?.trim());
       case 1:
         return !!(formData.conquista?.trim() && formData.dominio?.trim() && formData.clientes_querem?.trim() && 
                  formData.diferencial?.trim() && formData.cliente_nao_quer?.trim());
@@ -124,7 +124,6 @@ export default function MultiStepForm() {
         alert(result.error || 'Erro ao enviar formulário');
       }
     } catch (error) {
-      console.error('Erro ao enviar:', error);
       alert('Erro de rede ao enviar formulário');
     } finally {
       setIsSubmitting(false);
@@ -226,13 +225,13 @@ export default function MultiStepForm() {
                 
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-gray-700">
-                    Email Profissional <span className="text-red-500">*</span>
+                    Email <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="email"
                     value={formData.email}
                     onChange={(e) => handleInputChange('email', e.target.value)}
-                    placeholder="seuemail@valorinvestimentos.com.br"
+                    placeholder="seuemail@example.com"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900"
                     required
                   />
@@ -252,24 +251,6 @@ export default function MultiStepForm() {
                   />
                 </div>
                 
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Tempo na Valor Investimentos <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    value={formData.tempo_valor}
-                    onChange={(e) => handleInputChange('tempo_valor', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
-                    required
-                  >
-                    <option value="">Selecione o tempo...</option>
-                    <option value="menos_6">Menos de 6 meses</option>
-                    <option value="6_12">6 meses a 1 ano</option>
-                    <option value="1_2">1 a 2 anos</option>
-                    <option value="2_3">2 a 3 anos</option>
-                    <option value="mais_3">Mais de 3 anos</option>
-                  </select>
-                </div>
               </div>
             </div>
           )}
@@ -289,13 +270,13 @@ export default function MultiStepForm() {
               <div className="space-y-6">
                 <div className="bg-blue-50 rounded-lg p-6">
                   <label className="block text-sm font-medium text-gray-700 mb-3">
-                    Qual foi sua maior conquista profissional? <span className="text-red-500">*</span>
+                    Descreva sua trajetória e suas conquistas profissionais <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     value={formData.conquista}
                     onChange={(e) => handleInputChange('conquista', e.target.value)}
                     rows={4}
-                    placeholder="Descreva um marco importante em sua carreira como assessor..."
+                    placeholder="Descreva sua trajetória..."
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900"
                     required
                   />
@@ -317,13 +298,13 @@ export default function MultiStepForm() {
                 
                 <div className="bg-green-50 rounded-lg p-6">
                   <label className="block text-sm font-medium text-gray-700 mb-3">
-                    O que seus clientes mais procuram você para resolver? <span className="text-red-500">*</span>
+                    O que você mais gosta de ensinar? Ex: planejamento, renda variável... <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     value={formData.clientes_querem}
                     onChange={(e) => handleInputChange('clientes_querem', e.target.value)}
                     rows={3}
-                    placeholder="Quais são as principais dúvidas e necessidades dos seus clientes..."
+                    placeholder="Ex: planejamento, renda variável, fundos imobiliários..."
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900"
                     required
                   />
