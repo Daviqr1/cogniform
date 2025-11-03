@@ -121,7 +121,7 @@ export default function MultiStepForm() {
       } else {
         alert(result.error || 'Erro ao enviar formulário');
       }
-    } catch (error) {
+    } catch {
       alert('Erro de rede ao enviar formulário');
     } finally {
       setIsSubmitting(false);
@@ -482,7 +482,7 @@ export default function MultiStepForm() {
                 
                 <div className="bg-slate-50 rounded-lg p-6">
                   <label className="block text-lg font-medium text-gray-700 mb-3">
-                    Complete: "O assessor que eu quero ser é aquele que..." <span className="text-red-500">*</span>
+                    Complete: &quot;O assessor que eu quero ser é aquele que...&quot; <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     value={formData.assessor_que}
@@ -513,7 +513,7 @@ export default function MultiStepForm() {
           {/* Etapa 5: Plano */}
           {currentStep === 4 && (
             <div>
-              <div className="text-center mb-8 md:mb-12">
+              <div className="text-center mb-6 md:mb-10">
                 <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-2 md:mb-3">
                   Escolha seu Plano de Crescimento
                 </h2>
@@ -522,196 +522,269 @@ export default function MultiStepForm() {
                 </p>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-5 max-w-6xl mx-auto">
                 
                 {/* Plano Basic */}
                 <div 
-                  className={`relative rounded-lg md:rounded-xl p-5 md:p-6 cursor-pointer transition-all duration-300 border-2 flex flex-col h-full ${
+                  className={`relative rounded-lg md:rounded-xl overflow-hidden cursor-pointer transition-all duration-300 border-2 flex flex-col ${
                     formData.plano_assinatura === 'basic' 
-                      ? 'border-emerald-500 bg-gradient-to-br from-emerald-50 to-emerald-100 shadow-2xl' 
+                      ? 'border-emerald-500 bg-gradient-to-br from-emerald-50 to-emerald-100/50 shadow-xl' 
                       : 'border-gray-200 hover:border-emerald-300 hover:shadow-lg bg-white'
                   }`}
                   onClick={() => handleInputChange('plano_assinatura', 'basic')}
                 >
-                  <div className="flex items-start justify-between mb-3 md:mb-4">
-                    <div>
-                      <h3 className="text-base md:text-lg font-bold text-gray-800">Basic</h3>
-                      <p className="text-xs md:text-sm text-gray-500 mt-0.5">Início estratégico</p>
-                    </div>
-                    <input
-                      type="radio"
-                      name="plano_assinatura"
-                      value="basic"
-                      checked={formData.plano_assinatura === 'basic'}
-                      onChange={(e) => handleInputChange('plano_assinatura', e.target.value)}
-                      className="w-5 h-5 text-emerald-500 mt-1 flex-shrink-0"
-                    />
-                  </div>
+                  <div className="h-1 bg-gradient-to-r from-emerald-400 to-emerald-500"></div>
                   
-                  <div className="mb-4 md:mb-5 pb-3 md:pb-4 border-b border-gray-200">
-                    <span className="text-xl md:text-2xl font-bold text-gray-800">R$ 700</span>
-                    <span className="text-xs md:text-sm text-gray-500 ml-1">/mês</span>
-                  </div>
-                  
-                  <div className="space-y-2.5 md:space-y-3 flex-1 mb-4 md:mb-5">
-                    <div className="flex items-start">
-                      <div className="w-5 h-5 bg-emerald-200 rounded flex items-center justify-center mr-2.5 flex-shrink-0 mt-0.5">
-                        <svg className="w-3 h-3 text-emerald-700" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  <div className="p-3 md:p-5 flex flex-col">
+                    {/* SVG Icon */}
+                    <div className="flex justify-center mb-3">
+                      <div className="w-14 h-14 md:w-16 md:h-16 bg-emerald-100 rounded-lg flex items-center justify-center">
+                        <svg className="w-7 h-7 md:w-8 md:h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                       </div>
-                      <span className="text-gray-700 text-xs md:text-sm font-medium leading-tight">2 conteúdos por semana</span>
                     </div>
-                    <div className="flex items-start">
-                      <div className="w-5 h-5 bg-emerald-200 rounded flex items-center justify-center mr-2.5 flex-shrink-0 mt-0.5">
-                        <svg className="w-3 h-3 text-emerald-700" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <span className="text-gray-700 text-xs md:text-sm font-medium leading-tight">Legendas profissionais</span>
+                    
+                    <div className="text-center mb-2">
+                      <h3 className="text-base md:text-lg font-bold text-gray-800">Plano Basic</h3>
+                      <p className="text-xs md:text-xs text-gray-600 mt-0.5">Início Estratégico</p>
                     </div>
-                    <div className="flex items-start">
-                      <div className="w-5 h-5 bg-emerald-200 rounded flex items-center justify-center mr-2.5 flex-shrink-0 mt-0.5">
-                        <svg className="w-3 h-3 text-emerald-700" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
+                    
+                    <div className="mb-3 pb-2.5 md:pb-3 border-b border-gray-200 text-center">
+                      <div className="flex items-baseline justify-center gap-1">
+                        <span className="text-2xl md:text-2xl font-bold text-gray-800">R$ 700</span>
+                        <span className="text-xs text-gray-600">/mês</span>
                       </div>
-                      <span className="text-gray-700 text-xs md:text-sm font-medium leading-tight">Hashtags estratégicas</span>
+                      <p className="text-xs text-emerald-600 font-medium mt-1">Foco: Transformar suas ideias</p>
+                    </div>
+                    
+                    <div className="space-y-2 mb-3 flex-1">
+                      <div className="flex items-start gap-2">
+                        <div className="w-4 h-4 bg-emerald-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <svg className="w-2.5 h-2.5 text-emerald-700" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <span className="text-gray-700 text-xs md:text-xs font-medium leading-tight">2 Edições de Vídeo Profissionais/semana</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <div className="w-4 h-4 bg-emerald-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <svg className="w-2.5 h-2.5 text-emerald-700" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <span className="text-gray-700 text-xs md:text-xs font-medium leading-tight">Legendas Dinâmicas (viral)</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <div className="w-4 h-4 bg-emerald-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <svg className="w-2.5 h-2.5 text-emerald-700" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <span className="text-gray-700 text-xs md:text-xs font-medium leading-tight">Legendas Profissionais</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-2 text-xs text-gray-600 pt-2 border-t border-gray-100">
+                      <input
+                        type="radio"
+                        name="plano_assinatura"
+                        value="basic"
+                        checked={formData.plano_assinatura === 'basic'}
+                        onChange={(e) => handleInputChange('plano_assinatura', e.target.value)}
+                        className="w-4 h-4 text-emerald-500 cursor-pointer"
+                      />
+                      <span className="font-medium text-xs">Selecionar</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Plano Silver - DESTAQUE */}
                 <div 
-                  className={`relative rounded-lg md:rounded-xl p-5 md:p-6 cursor-pointer transition-all duration-300 border-2 flex flex-col h-full ${
+                  className={`relative rounded-lg md:rounded-xl overflow-hidden cursor-pointer transition-all duration-300 border-2 flex flex-col md:scale-105 ${
                     formData.plano_assinatura === 'silver' 
-                      ? 'border-blue-500 bg-gradient-to-br from-blue-50 to-indigo-100 shadow-2xl' 
-                      : 'border-blue-300 hover:border-blue-500 hover:shadow-lg bg-gradient-to-br from-white to-blue-50'
+                      ? 'border-blue-500 bg-gradient-to-br from-blue-50 to-indigo-100/50 shadow-xl' 
+                      : 'border-blue-400 hover:border-blue-500 hover:shadow-lg bg-gradient-to-br from-white to-blue-50/50'
                   }`}
                   onClick={() => handleInputChange('plano_assinatura', 'silver')}
                 >
-                  <div className="absolute -top-2.5 md:-top-3 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-3 md:px-4 py-1.5 md:py-2 rounded-full flex items-center gap-1.5 shadow-lg">
-                      <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                      </svg>
-                      <span className="text-xs md:text-sm font-bold whitespace-nowrap">Recomendado</span>
-                    </div>
-                  </div>
+                  <div className="h-1 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
                   
-                  <div className="flex items-start justify-between mb-3 md:mb-4 mt-6 md:mt-7">
-                    <div>
-                      <h3 className="text-base md:text-lg font-bold text-gray-800">Silver</h3>
-                      <p className="text-xs md:text-sm text-gray-500 mt-0.5">Crescimento acelerado</p>
-                    </div>
-                    <input
-                      type="radio"
-                      name="plano_assinatura"
-                      value="silver"
-                      checked={formData.plano_assinatura === 'silver'}
-                      onChange={(e) => handleInputChange('plano_assinatura', e.target.value)}
-                      className="w-5 h-5 text-blue-500 mt-1 flex-shrink-0"
-                    />
-                  </div>
-                  
-                  <div className="mb-4 md:mb-5 pb-3 md:pb-4 border-b border-gray-200">
-                    <div className="flex items-baseline">
-                      <span className="text-xl md:text-2xl font-bold text-gray-800">R$ 850</span>
-                      <span className="text-xs md:text-sm text-gray-500 ml-1">/mês</span>
-                    </div>
-                    <p className="text-xs text-blue-600 font-semibold mt-1">Melhor custo-benefício</p>
-                  </div>
-                  
-                  <div className="space-y-2.5 md:space-y-3 flex-1 mb-4 md:mb-5">
-                    <div className="flex items-start">
-                      <div className="w-5 h-5 bg-blue-200 rounded flex items-center justify-center mr-2.5 flex-shrink-0 mt-0.5">
-                        <svg className="w-3 h-3 text-blue-700" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  <div className="p-3 md:p-5 pt-3 md:pt-5 flex flex-col">
+                    {/* SVG Icon */}
+                    <div className="flex justify-center mb-3">
+                      <div className="w-14 h-14 md:w-16 md:h-16 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <svg className="w-7 h-7 md:w-8 md:h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                       </div>
-                      <span className="text-gray-700 text-xs md:text-sm font-medium leading-tight">3 conteúdos por semana</span>
                     </div>
-                    <div className="flex items-start">
-                      <div className="w-5 h-5 bg-blue-200 rounded flex items-center justify-center mr-2.5 flex-shrink-0 mt-0.5">
-                        <svg className="w-3 h-3 text-blue-700" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <span className="text-gray-700 text-xs md:text-sm font-medium leading-tight">Gestão completa Instagram</span>
+                    
+                    <div className="text-center mb-2">
+                      <h3 className="text-base md:text-lg font-bold text-gray-800">Plano Silver</h3>
+                      <p className="text-xs md:text-xs text-gray-600 mt-0.5">Crescimento Acelerado</p>
                     </div>
-                    <div className="flex items-start">
-                      <div className="w-5 h-5 bg-blue-200 rounded flex items-center justify-center mr-2.5 flex-shrink-0 mt-0.5">
-                        <svg className="w-3 h-3 text-blue-700" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
+                    
+                    <div className="mb-3 pb-2.5 md:pb-3 border-b border-gray-200 text-center">
+                      <div className="flex items-baseline justify-center gap-1">
+                        <span className="text-2xl md:text-2xl font-bold text-gray-800">R$ 900</span>
+                        <span className="text-xs text-gray-600">/mês</span>
                       </div>
-                      <span className="text-gray-700 text-xs md:text-sm font-medium leading-tight">Relatórios de performance</span>
+                      <p className="text-xs text-blue-600 font-medium mt-1">Foco: Conteúdo estratégico</p>
+                    </div>
+                    
+                    <div className="space-y-2 mb-3 flex-1">
+                      <div className="flex items-start gap-2">
+                        <div className="w-4 h-4 bg-blue-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <svg className="w-2.5 h-2.5 text-blue-700" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <span className="text-gray-700 text-xs md:text-xs font-medium leading-tight">3 Roteiros Virais/semana (ACEA)</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <div className="w-4 h-4 bg-blue-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <svg className="w-2.5 h-2.5 text-blue-700" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <span className="text-gray-700 text-xs md:text-xs font-medium leading-tight">3 Vídeos Editados (Reels/TikTok)</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <div className="w-4 h-4 bg-blue-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <svg className="w-2.5 h-2.5 text-blue-700" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <span className="text-gray-700 text-xs md:text-xs font-medium leading-tight">Legendas e Hashtags Estratégicas</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <div className="w-4 h-4 bg-blue-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <svg className="w-2.5 h-2.5 text-blue-700" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <span className="text-gray-700 text-xs md:text-xs font-medium leading-tight">Gestão Instagram/TikTok</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <div className="w-4 h-4 bg-blue-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <svg className="w-2.5 h-2.5 text-blue-700" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <span className="text-gray-700 text-xs md:text-xs font-medium leading-tight">Relatórios de Performance</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-2 text-xs text-gray-600 pt-2 border-t border-gray-200">
+                      <input
+                        type="radio"
+                        name="plano_assinatura"
+                        value="silver"
+                        checked={formData.plano_assinatura === 'silver'}
+                        onChange={(e) => handleInputChange('plano_assinatura', e.target.value)}
+                        className="w-4 h-4 text-blue-500 cursor-pointer"
+                      />
+                      <span className="font-medium text-xs">Selecionar</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Plano Gold - PREMIUM */}
                 <div 
-                  className={`relative rounded-lg md:rounded-xl p-5 md:p-6 cursor-pointer transition-all duration-300 border-2 flex flex-col h-full ${
+                  className={`relative rounded-lg md:rounded-xl overflow-hidden cursor-pointer transition-all duration-300 border-2 flex flex-col ${
                     formData.plano_assinatura === 'gold' 
-                      ? 'border-amber-500 bg-gradient-to-br from-amber-50 to-yellow-100 shadow-2xl' 
+                      ? 'border-amber-500 bg-gradient-to-br from-amber-50 to-yellow-100/50 shadow-xl' 
                       : 'border-gray-200 hover:border-amber-300 hover:shadow-lg bg-white'
                   }`}
                   onClick={() => handleInputChange('plano_assinatura', 'gold')}
                 >
-                  <div className="absolute -top-2.5 md:-top-3 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-gradient-to-r from-amber-600 to-amber-500 text-white px-3 md:px-4 py-1.5 md:py-2 rounded-full flex items-center gap-1.5 shadow-lg">
-                      <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.5 4.25c.412-.312.812-.62 1.5-.62.688 0 1.088.308 1.5.62l1.68 1.26c.195.148.433.185.657.07l1.97-1.01c.547-.28 1.09-.055 1.374.493.284.548.055 1.092-.491 1.372l-1.969 1.012c-.225.115-.372.35-.334.588l.335 2.194c.075.496-.35.924-.847.924-.496 0-.922-.428-.847-.924l.335-2.194c.038-.238-.109-.473-.334-.588L11 6.01c-.414-.312-.813-.619-1.5-.619-.688 0-1.088.307-1.5.62l-1.68 1.26c-.195.147-.433.185-.657.07l-1.97-1.01c-.546-.28-1.09-.055-1.374.493-.284.548-.055 1.092.491 1.372l1.969 1.012c.225.115.372.35.334.588l-.335 2.194c-.075.496.35.924.847.924.496 0 .922-.428.847-.924l-.335-2.194c-.038-.238.109-.473.334-.588L9.5 4.25z"/>
-                      </svg>
-                      <span className="text-xs md:text-sm font-bold whitespace-nowrap">Premium</span>
-                    </div>
-                  </div>
+                  <div className="h-1 bg-gradient-to-r from-amber-400 to-amber-600"></div>
                   
-                  <div className="flex items-start justify-between mb-3 md:mb-4 mt-6 md:mt-7">
-                    <div>
-                      <h3 className="text-base md:text-lg font-bold text-gray-800">Gold</h3>
-                      <p className="text-xs md:text-sm text-gray-500 mt-0.5">Dominância completa</p>
-                    </div>
-                    <input
-                      type="radio"
-                      name="plano_assinatura"
-                      value="gold"
-                      checked={formData.plano_assinatura === 'gold'}
-                      onChange={(e) => handleInputChange('plano_assinatura', e.target.value)}
-                      className="w-5 h-5 text-amber-500 mt-1 flex-shrink-0"
-                    />
-                  </div>
-                  
-                  <div className="mb-4 md:mb-5 pb-3 md:pb-4 border-b border-gray-200">
-                    <span className="text-xl md:text-2xl font-bold text-gray-800">R$ 1.200</span>
-                    <span className="text-xs md:text-sm text-gray-500 ml-1">/mês</span>
-                  </div>
-                  
-                  <div className="space-y-2.5 md:space-y-3 flex-1 mb-4 md:mb-5">
-                    <div className="flex items-start">
-                      <div className="w-5 h-5 bg-amber-200 rounded flex items-center justify-center mr-2.5 flex-shrink-0 mt-0.5">
-                        <svg className="w-3 h-3 text-amber-700" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  <div className="p-3 md:p-5 pt-3 md:pt-5 flex flex-col">
+                    {/* SVG Icon */}
+                    <div className="flex justify-center mb-3">
+                      <div className="w-14 h-14 md:w-16 md:h-16 bg-amber-100 rounded-lg flex items-center justify-center">
+                        <svg className="w-7 h-7 md:w-8 md:h-8 text-amber-600" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                         </svg>
                       </div>
-                      <span className="text-gray-700 text-xs md:text-sm font-medium leading-tight">5 conteúdos por semana</span>
                     </div>
-                    <div className="flex items-start">
-                      <div className="w-5 h-5 bg-amber-200 rounded flex items-center justify-center mr-2.5 flex-shrink-0 mt-0.5">
-                        <svg className="w-3 h-3 text-amber-700" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <span className="text-gray-700 text-xs md:text-sm font-medium leading-tight">Estratégia de conteúdo</span>
+                    
+                    <div className="text-center mb-2">
+                      <h3 className="text-base md:text-lg font-bold text-gray-800">Plano Gold</h3>
+                      <p className="text-xs md:text-xs text-gray-600 mt-0.5">Dominância Completa</p>
                     </div>
-                    <div className="flex items-start">
-                      <div className="w-5 h-5 bg-amber-200 rounded flex items-center justify-center mr-2.5 flex-shrink-0 mt-0.5">
-                        <svg className="w-3 h-3 text-amber-700" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
+                    
+                    <div className="mb-3 pb-2.5 md:pb-3 border-b border-gray-200 text-center">
+                      <div className="flex items-baseline justify-center gap-1">
+                        <span className="text-2xl md:text-2xl font-bold text-gray-800">R$ 1.200</span>
+                        <span className="text-xs text-gray-600">/mês</span>
                       </div>
-                      <span className="text-gray-700 text-xs md:text-sm font-medium leading-tight">Suporte VIP e relatórios avançados</span>
+                      <p className="text-xs text-amber-600 font-medium mt-1">Foco: Estratégia completa</p>
+                    </div>
+                    
+                    <div className="space-y-2 mb-3 flex-1">
+                      <div className="flex items-start gap-2">
+                        <div className="w-4 h-4 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <svg className="w-2.5 h-2.5 text-amber-700" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <span className="text-gray-700 text-xs md:text-xs font-medium leading-tight">5 Conteúdos/semana (Mix)</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <div className="w-4 h-4 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <svg className="w-2.5 h-2.5 text-amber-700" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <span className="text-gray-700 text-xs md:text-xs font-medium leading-tight">Roteiros Estratégicos Ilimitados</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <div className="w-4 h-4 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <svg className="w-2.5 h-2.5 text-amber-700" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <span className="text-gray-700 text-xs md:text-xs font-medium leading-tight">Cronograma Editorial Completo</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <div className="w-4 h-4 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <svg className="w-2.5 h-2.5 text-amber-700" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <span className="text-gray-700 text-xs md:text-xs font-medium leading-tight">Gestão COMPLETA Instagram</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <div className="w-4 h-4 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <svg className="w-2.5 h-2.5 text-amber-700" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <span className="text-gray-700 text-xs md:text-xs font-medium leading-tight">Gestão de Comunidade (DMs)</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <div className="w-4 h-4 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <svg className="w-2.5 h-2.5 text-amber-700" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <span className="text-gray-700 text-xs md:text-xs font-medium leading-tight">Suporte VIP (WhatsApp)</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-2 text-xs text-gray-600 pt-2 border-t border-gray-200">
+                      <input
+                        type="radio"
+                        name="plano_assinatura"
+                        value="gold"
+                        checked={formData.plano_assinatura === 'gold'}
+                        onChange={(e) => handleInputChange('plano_assinatura', e.target.value)}
+                        className="w-4 h-4 text-amber-500 cursor-pointer"
+                      />
+                      <span className="font-medium text-xs">Selecionar</span>
                     </div>
                   </div>
                 </div>
